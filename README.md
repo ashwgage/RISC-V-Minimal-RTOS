@@ -14,12 +14,12 @@
 
 </div>
 
-<a href="https://kaweees.github.io/kiwiRTOS">
+<a href="https://kaweees.github.io/RISC-V-Minimal-RTOS">
   <img alt="Zig Logo" src="assets/img/zig-mark.svg" align="right" width="150">
 </a>
 
 <div align="left">
-  <h1><em><a href="https://kaweees.github.io/kiwiRTOS">~kiwiRTOS</a></em></h1>
+  <h1><em><a href="https://ashwgage.github.io/kiwiRTOS">~RISC-V RTOS</a></em></h1>
 </div>
 
 <!-- ABOUT THE PROJECT -->
@@ -57,8 +57,8 @@ To get a local copy of the project up and running on your machine, follow these 
 1. Clone the project repository
 
    ```sh
-   git clone https://github.com/Kaweees/kiwiRTOS.git
-   cd kiwiRTOS
+   git clone https://github.com/ashwgage/RISC-V-Minimal-RTOS.git
+   cd RTOS
    ```
 
 2. Install the project dependencies
