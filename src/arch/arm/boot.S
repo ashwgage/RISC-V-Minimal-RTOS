@@ -10,7 +10,7 @@ _start:
   // hart to execute the boot code.
   bnez  t0, 3f
   // Clear the SATP CSR as we want to work with physical addresses and while booting
-  // do not want virtual memory enabled.
+  // do not want virtual memory enabled .
   csrw satp, zero
 .option push
 .option norelax
