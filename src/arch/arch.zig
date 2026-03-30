@@ -1,42 +1,56 @@
-//! This file provides architecture-specific definitions for the kiwiRTOS kernel.
+//! Architecture abstraction layer.
+//!
+//! This module selects the correct architecture implementation at compile time
+//! and re-exports a unified interface for the rest of the kernel.
 
 const builtin = @import("builtin");
 
-// Import the appropriate architecture-specific module
-const arch_impl = switch (builtin.cpu.arch) {
+/// Resolve the active architecture implementation at compile time.
+const Arch = switch (builtin.cpu.arch) {
     .x86_64 => @import("./x86_64/arch.zig"),
     .aarch64 => @import("./arm/arch.zig"),
     .riscv64, .riscv32 => @import("./riscv/arch.zig"),
     else => @compileError("Unsupported architecture"),
 };
 
-// Re-export architecture-specific functions
-/// Read a byte from an I/O port
-pub const outb = arch_impl.outb;
-/// Write a byte to an I/O port
-pub const inb = arch_impl.inb;
-/// Disable interrupts
-pub const cli = arch_impl.cli;
-/// Restore interrupts
-pub const sti = arch_impl.sti;
-/// Halt the CPU
-pub const hlt = arch_impl.hlt;
+// -----------------------------------------------------------------------------
+// Low-level CPU / I/O operations
+// -----------------------------------------------------------------------------
 
-// Re-export architecture-specific constants
+/// Write a byte to an I/O port.
+pub const outb = Arch.outb;
 
-// Memory-mapped I/O addresses
+/// Read a byte from an I/O port.
+pub const inb = Arch.inb;
 
-/// Generic VGA text mode buffer address
-pub const VGA_TEXT_BUFFER = arch_impl.VGA_TEXT_BUFFER;
-/// Generic UART buffer address
-pub const UART_BUFFER = arch_impl.UART_BUFFER;
+/// Disable interrupts.
+pub const cli = Arch.cli;
 
-// Port‑mapped I/O
+/// Enable interrupts (restore).
+pub const sti = Arch.sti;
 
-// Generic PS/2 Controller I/O Ports
-/// Generic PS/2 controller data port (read/write)
-pub const PS2_DATA_PORT = arch_impl.PS2_DATA_PORT;
-/// Generic PS/2 controller status port (read)
-pub const PS2_STATUS_PORT = arch_impl.PS2_STATUS_PORT;
-/// Generic PS/2 controller command port (write)
-pub const PS2_COMMAND_PORT = arch_impl.PS2_COMMAND_PORT;
+/// Halt the CPU until the next interrupt.
+pub const hlt = Arch.hlt;
+
+// -----------------------------------------------------------------------------
+// Memory-mapped I/O
+// -----------------------------------------------------------------------------
+
+/// VGA text mode buffer base address.
+pub const VGA_TEXT_BUFFER = Arch.VGA_TEXT_BUFFER;
+
+/// UART buffer base address.
+pub const UART_BUFFER = Arch.UART_BUFFER;
+
+// -----------------------------------------------------------------------------
+// Port-mapped I/O (PS/2 Controller)
+// -----------------------------------------------------------------------------
+
+/// PS/2 controller data port (read/write).
+pub const PS2_DATA_PORT = Arch.PS2_DATA_PORT;
+
+/// PS2 controller status port (read).
+pub const PS2_STATUS_PORT = Arch.PS2_STATUS_PORT;
+
+/// PS2 controller command port (write).
+pub const PS2_COMMAND_PORT = Arch.PS2_COMMAND_PORT;
